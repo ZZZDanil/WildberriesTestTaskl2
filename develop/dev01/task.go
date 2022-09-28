@@ -1,5 +1,13 @@
 package main
 
+import (
+	"fmt"
+	"os"
+	"time"
+
+	"github.com/beevik/ntp"
+)
+
 /*
 === Базовая задача ===
 
@@ -13,5 +21,15 @@ package main
 */
 
 func main() {
+	// https://socketloop.com/tutorials/golang-get-current-time-from-the-internet-time-server-ntp-example
+	ntpTime, err := ntp.Time("time.apple.com,")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(-1)
+	}
+
+	fmt.Println("Local time: ", time.Now().Local().Format(time.UnixDate))
+	fmt.Println("NTP time:   ", ntpTime.Format(time.UnixDate))
+	os.Exit(1)
 
 }

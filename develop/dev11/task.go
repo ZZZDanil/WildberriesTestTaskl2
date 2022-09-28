@@ -1,5 +1,9 @@
 package main
 
+import (
+	server "server"
+)
+
 /*
 === HTTP server ===
 
@@ -23,5 +27,5 @@ package main
 */
 
 func main() {
-
+	server.Run()
 }

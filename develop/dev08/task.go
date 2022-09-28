@@ -1,5 +1,10 @@
 package main
 
+import (
+	"os"
+	"os/exec"
+)
+
 /*
 === Взаимодействие с ОС ===
 
@@ -15,5 +20,13 @@ package main
 */
 
 func main() {
+	// go build
+	// run .exe
+	e := exec.Command("powershell")
+
+	e.Stderr = os.Stderr
+	e.Stdout = os.Stdout
+	e.Stdin = os.Stdin
+	e.Run()
 
 }

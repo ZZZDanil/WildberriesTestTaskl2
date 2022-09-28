@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"time"
+)
+
 /*
 === Or channel ===
 
@@ -34,5 +39,37 @@ fmt.Printf(“fone after %v”, time.Since(start))
 */
 
 func main() {
+	var or func(channels ...<-chan interface{}) <-chan interface{}
 
+	or = func(channels ...<-chan interface{}) <-chan interface{} {
+		c := make(chan interface{})
+		for chanId, chanel := range channels {
+			go func(chanId int, chanel <-chan interface{}) {
+				close(c)
+			}(chanId, chanel)
+		}
+		return c
+	}
+
+	sig := func(after time.Duration) <-chan interface{} {
+		c := make(chan interface{})
+		go func() {
+			defer close(c)
+			time.Sleep(after)
+			fmt.Println("end sleep: ", after)
+		}()
+		fmt.Println("start sleep: ", after)
+		return c
+	}
+
+	start := time.Now()
+	<-or(
+		sig(2*time.Hour),
+		sig(5*time.Minute),
+		sig(1*time.Second),
+		sig(1*time.Hour),
+		sig(1*time.Minute),
+	)
+
+	fmt.Printf("fone after %v", time.Since(start))
 }

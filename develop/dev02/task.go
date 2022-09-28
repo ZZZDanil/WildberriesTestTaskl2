@@ -1,5 +1,12 @@
 package main
 
+import (
+	"errors"
+	"flag"
+	"fmt"
+	"strconv"
+)
+
 /*
 === Задача на распаковку ===
 
@@ -19,5 +26,61 @@ package main
 */
 
 func main() {
+	var inputString string
 
+	// flags declaration using flag package
+	flag.StringVar(&inputString, "u", "ppppppp", "String for parsing")
+	flag.Parse()
+
+	fmt.Println("input:  ", inputString)
+	s, _ := stringPars(inputString)
+	fmt.Println("output: ", s)
+}
+
+func stringPars(inputString string) (string, error) {
+	if inputString == "" {
+		return "", nil
+	} else {
+
+		out := make([]rune, 0, 10)
+		var runeBuf rune
+		isEscape := false
+		isEscapeSimbol := false
+		isCountRep := false
+		for _, r := range inputString {
+			if r == '\\' {
+				if isEscape == false {
+					isEscape = true
+					isEscapeSimbol = true
+					continue
+				} else {
+					return "некорректная строка", errors.New("\\\\s")
+				}
+			} else {
+				isEscape = false
+				value, err := strconv.Atoi(string(r))
+				if err != nil || isEscapeSimbol {
+					isEscapeSimbol = false
+					isCountRep = false
+					runeBuf = r
+					out = append(out, r)
+					continue
+				} else {
+					if !isCountRep {
+						isCountRep = true
+						o := make([]rune, value-1)
+						for i := range o {
+							o[i] = runeBuf
+						}
+						out = append(out, o...)
+					} else {
+						return "некорректная строка", errors.New("два числа подряд")
+					}
+				}
+
+			}
+
+		}
+		return string(out), nil
+	}
 }

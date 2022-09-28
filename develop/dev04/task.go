@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+	"sort"
+	"strings"
+)
+
 /*
 === Поиск анаграмм по словарю ===
 
@@ -20,5 +26,36 @@ package main
 */
 
 func main() {
+	words := []string{"пятак", "листок", "слиток", "столик", "пятка", "тяпка"}
+	out := Find(words)
+	for _, o := range out {
+		fmt.Println(o)
+	}
+}
 
+func Find(words []string) map[string][]string {
+	buf := make(map[string]int8)
+	out := make(map[string][]string)
+	for _, word := range words {
+		s := strings.ToLower(word)
+		if _, ok := buf[s]; ok == false {
+			buf[s] = 1
+			sortS := sortString(s)
+			if _, ok := out[sortS]; ok == false {
+				out[sortS] = make([]string, 0)
+			}
+			out[sortS] = append(out[sortS], s)
+		}
+	}
+	return out
+}
+
+func sortString(word string) string {
+	wordRunes := []rune(word)
+	sort.Slice(wordRunes, func(i, j int) bool {
+		return wordRunes[i] < wordRunes[j]
+	})
+
+	wordSorted := string(wordRunes)
+	return wordSorted
 }

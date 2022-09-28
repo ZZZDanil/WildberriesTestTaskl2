@@ -1,0 +1,9 @@
+1 asda abc
+5 asda aaa
+1 asda bbb
+1 asda ccc
+2 asda cab
+3 asda bca
+4 asda acb
+4 asda cca
+1 asda bba
