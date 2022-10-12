@@ -1,42 +1,56 @@
 package pattern
 
+import "fmt"
+
 /*
 	Реализовать паттерн «цепочка вызовов».
 Объяснить применимость паттерна, его плюсы и минусы, а также реальные примеры использования данного примера на практике.
 	https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
 */
 
-type Data struct {
-	int
+type ChainOfRespData struct {
+	Int int
 }
 
 type Chain interface {
-	Logic(d *Data)
-	NextChain(c *Chain)
+	Logic()
+	SetNextChain(c *Chain)
 }
 
 type ChainExample1 struct {
-	Chain *Chain
+	ChainOfRespData *ChainOfRespData
+	NextChain       Chain
 }
 
-func (c *ChainExample1) Logic(d *Data) {
-	// ChainExample1 logic
-	d.int++
-	(*c.Chain).Logic(d)
+func (c *ChainExample1) Logic() {
+	fmt.Println("Do ChainExample1 Logic()")
+	c.ChainOfRespData.Int++
+	if c.NextChain != nil {
+		fmt.Println("ChainExample1 Do NextChain")
+		c.NextChain.Logic()
+	} else {
+		fmt.Println("ChainExample1 NextChain = nil")
+	}
 }
-func (c *ChainExample1) NextChain(next *Chain) {
-	c.Chain = next
+func (c *ChainExample1) SetNextChain(next *Chain) {
+	c.NextChain = *next
 }
 
 type ChainExample2 struct {
-	Chain *Chain
+	ChainOfRespData *ChainOfRespData
+	NextChain       Chain
 }
 
-func (c *ChainExample2) Logic(d *Data) {
-	// ChainExample2 logic
-	d.int++
-	(*c.Chain).Logic(d)
+func (c *ChainExample2) Logic() {
+	fmt.Println("Do ChainExample2 Logic()")
+	c.ChainOfRespData.Int += 100
+	if c.NextChain != nil {
+		fmt.Println("ChainExample2 Do NextChain")
+		c.NextChain.Logic()
+	} else {
+		fmt.Println("ChainExample2 NextChain = nil")
+	}
 }
-func (c *ChainExample2) NextChain(next *Chain) {
-	c.Chain = next
+func (c *ChainExample2) SetNextChain(next *Chain) {
+	c.NextChain = *next
 }

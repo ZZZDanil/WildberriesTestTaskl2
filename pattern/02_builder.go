@@ -1,6 +1,9 @@
 package pattern
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 /*
 	Реализовать паттерн «строитель».
@@ -13,25 +16,47 @@ const (
 	t2
 )
 
-type Builder struct {
+type MyStringBuilder struct {
+	value1, value2 string
 }
 
-func (b *Builder) Build(buildType int) {
+func (b *MyStringBuilder) HardLogic1(buildType int) {
 	switch buildType {
 	case t1:
 		{
-			Build1()
+			b.value1 = "Build1"
 		}
 	case t2:
 		{
-			Build2()
+			b.value1 = "Build2"
+		}
+	default:
+		{
+			fmt.Println("Error in HardLogic1 buildType : " + strconv.Itoa(buildType))
 		}
 	}
 }
 
-func Build1() {
-	fmt.Println("Build1")
+func (b *MyStringBuilder) HardLogic2(buildType int) {
+	switch buildType {
+	case t1:
+		{
+			b.value2 = "Build3"
+		}
+	case t2:
+		{
+			b.value2 = "Build4"
+		}
+	default:
+		{
+			fmt.Println("Error in HardLogic2 buildType : " + strconv.Itoa(buildType))
+		}
+	}
 }
-func Build2() {
-	fmt.Println("Build2")
+func (b *MyStringBuilder) GetString() string {
+	if b.value1 != "" && b.value2 != "" {
+		return (b.value1 + " " + b.value2)
+	} else {
+		return "GetString ERROR: value1: " + b.value1 + " value2: " + b.value2
+	}
 }

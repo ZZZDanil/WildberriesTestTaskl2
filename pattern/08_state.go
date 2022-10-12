@@ -10,22 +10,30 @@ import "fmt"
 type State interface {
 	DoSome()
 }
-type Obj struct {
+type StateMachine struct {
 	main, a, b State
 }
 
-func (o *Obj) Do() {
+func InitStateObj() *StateMachine {
+	a := &StateA{}
+	b := &StateB{}
+	return &StateMachine{main: a, a: a, b: b}
+}
+
+func (o *StateMachine) Do() {
 	o.main.DoSome()
+	o.changeState()
 }
-func (o *Obj) ChangeStateToA() {
-	o.main = o.a
-}
-func (o *Obj) ChangeStateToB() {
-	o.main = o.b
+func (o *StateMachine) changeState() {
+	if o.main == o.a {
+		o.main = o.b
+	} else {
+		o.main = o.a
+	}
 }
 
 type StateA struct {
-	Obj
+	StateMachine
 }
 
 func (s *StateA) DoSome() {
@@ -33,7 +41,7 @@ func (s *StateA) DoSome() {
 }
 
 type StateB struct {
-	Obj
+	StateMachine
 }
 
 func (s *StateB) DoSome() {

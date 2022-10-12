@@ -9,32 +9,32 @@ import "fmt"
 */
 
 type Strategy interface {
-	DoSome()
+	doSome()
 }
-type Obj struct {
+type RootStrategy struct {
 	Strategy
 }
 
-func (o *Obj) DoStrategy() {
-	o.Strategy.DoSome()
+func (o *RootStrategy) DoStrategy() {
+	o.Strategy.doSome()
 }
 
-type Strategy1 struct {
+type StrategyType1 struct {
 }
 
-func (s *Strategy1) DoSome() {
-	s.Strategy1Func()
+func (s *StrategyType1) doSome() {
+	s.strategy1Func()
 }
-func (s *Strategy1) Strategy1Func() {
+func (s *StrategyType1) strategy1Func() {
 	fmt.Println("Do Strategy1")
 }
 
-type Strategy2 struct {
+type StrategyType2 struct {
 }
 
-func (s *Strategy2) DoSome() {
-	s.Strategy2Func()
+func (s *StrategyType2) doSome() {
+	s.strategy2Func()
 }
-func (s *Strategy2) Strategy2Func() {
-	fmt.Println("Do Strategy1")
+func (s *StrategyType2) strategy2Func() {
+	fmt.Println("Do Strategy2")
 }

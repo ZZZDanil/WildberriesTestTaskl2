@@ -9,27 +9,31 @@ package pattern
 type Command interface {
 	Execute()
 }
-type Receiver struct {
-	int
-}
+
 type Invoker interface {
 	Invoke()
 }
 
 /////////////////////////
 
+type Receiver struct {
+	Int int
+}
+
+///
 type Command1 struct {
-	Receiver
+	*Receiver
 }
 
 func (c *Command1) Execute() {
-	c.Receiver.int++
+	c.Receiver.Int++
 }
 
+///
 type Invoker1 struct {
-	Command
+	Command *Command
 }
 
 func (i *Invoker1) Invoke() {
-	i.Command.Execute()
+	(*i.Command).Execute()
 }

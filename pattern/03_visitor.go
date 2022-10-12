@@ -8,24 +8,34 @@ import "fmt"
 	https://en.wikipedia.org/wiki/Visitor_pattern
 */
 
-type Visitor interface {
-	SomeLogicForBasicStruct(b *BasicStruct)
+type MyVisitor interface {
+	VisitSmallObject(s *SmallObjectForVisitor)
+	VisitBigObject(b *BigObjectForVisitor)
 }
 
-type VisitorRealisation1 struct {
+// структура визитёра, содержащая логику общего типа для нескольких других структур
+type MyVisitorRealisation struct{}
+
+func (m *MyVisitorRealisation) VisitSmallObject(s *SmallObjectForVisitor) {
+	fmt.Println("MyVisitorRealisation: Visit SmallObject")
+}
+func (m *MyVisitorRealisation) VisitBigObject(b *BigObjectForVisitor) {
+	fmt.Println("MyVisitorRealisation: Visit BigObject")
+
 }
 
-func (v *VisitorRealisation1) SomeLogicForBasicStruct(b *BasicStruct) {
-	fmt.Println(b.someData)
+// простая структура
+type SmallObjectForVisitor struct {
 }
 
-type VisitorRealisation2 struct {
+func (s *SmallObjectForVisitor) Accept(m MyVisitor) {
+	m.VisitSmallObject(s)
 }
 
-func (v *VisitorRealisation2) SomeLogicForBasicStruct(b *BasicStruct) {
-	fmt.Println("VisitorRealisation2 ", b.someData)
+// очень *сложная структура
+type BigObjectForVisitor struct {
 }
 
-type BasicStruct struct {
-	someData string
+func (b *BigObjectForVisitor) Accept(m MyVisitor) {
+	m.VisitBigObject(b)
 }
